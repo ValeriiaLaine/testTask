@@ -17,6 +17,7 @@ public class Main {
         int firstNumber;
         int secondNumber;
         boolean isRoman;
+
         if (str[0].matches("[IVXLCDM]+") && str[2].matches("[IVXLCDM]+")) {
             isRoman = true;
             firstNumber = toArabic(str[0]);
@@ -28,7 +29,9 @@ public class Main {
         } else {
             throw new IllegalArgumentException("You can use two arabic or two roman numbers, not one arabic number and one roman number");
         }
+
         String result = "" + operation(firstNumber, secondNumber, operator);
+
         if (isRoman == false) {
             return result;
         } else {
@@ -36,26 +39,45 @@ public class Main {
             return toRoman(value);
         }
     }
-    public static int toArabic (String romanNumber){
-        switch (romanNumber) {
-            case "I":
-                return 1;
-            case "V":
-                return 5;
-            case "X":
-                return 10;
-            case "L":
-                return 50;
-            case "C":
-                return 100;
-            case "D":
-                return 500;
-            case "M":
-                return 1000;
-            default:
-                throw new IllegalArgumentException("It's not a correct roman number");
+    public static int toArabic(String roman) {
+        int toArabicResult = 0;
+        int lastNumber = 0;
+        int currentNumber = 0;
+
+        for (int i = roman.length() - 1; i >= 0 ; i--) {
+            char ch = roman.charAt(i);
+            switch (ch) {
+                case 'I':
+                    currentNumber = 1;
+                    break;
+                case 'V':
+                    currentNumber = 5;
+                    break;
+                case 'X':
+                    currentNumber = 10;
+                    break;
+                case 'L':
+                    currentNumber = 50;
+                    break;
+                case 'C':
+                    currentNumber = 100;
+                    break;
+                case 'D':
+                    currentNumber = 500;
+                    break;
+                case 'M':
+                    currentNumber = 1000;
+                    break;
             }
+            if (currentNumber < lastNumber)
+                toArabicResult -= currentNumber;
+            else
+                toArabicResult += currentNumber;
+            lastNumber = currentNumber;
         }
+        return toArabicResult;
+    }
+
     public static String toRoman ( int number){
         if (number <= 0 || number > 3999) {
             throw new IllegalArgumentException("Invalid roman number");
@@ -63,6 +85,7 @@ public class Main {
         String[] romanNumbers = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
         int[] arabicNumbers = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
         StringBuilder romanResult = new StringBuilder();
+
         for (int i = 0; i < arabicNumbers.length; i++) {
             while (number >= arabicNumbers[i]) {
                 romanResult.append(romanNumbers[i]);
